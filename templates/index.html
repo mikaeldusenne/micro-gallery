@@ -1,0 +1,26 @@
+<!doctype html>
+<title>Pictures of {{ title }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<nav>
+  <h1>{{ title }}</h1>
+</nav>
+<section class="content">
+  <header>
+  </header>
+  <div class="flex-container">
+	{% for f in files %}
+	<div class="wrapper">
+	  {% if f['filetype'] == 'video' %}
+	  
+	  <a href="{{ url_for('static', filename=f['path']) }}" class="text">play</p>
+	  {% endif %}
+	  <a href="{{ url_for('static', filename=f['path'])  }}">
+
+		<img class="{{ f['class'] }}" src="{{ url_for('static', filename=f['thumb'])  }}"></img>
+
+	  </a>
+	</div>
+	
+	{% endfor %}
+  </div>
+</section>
