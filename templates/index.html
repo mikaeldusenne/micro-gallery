@@ -1,26 +1,36 @@
 <!doctype html>
 <title>Pictures of {{ title }}</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <nav>
   <h1>{{ title }}</h1>
 </nav>
-<section class="content">
-  <header>
-  </header>
-  <div class="flex-container">
-	{% for f in files %}
-	<div class="wrapper">
-	  {% if f['filetype'] == 'video' %}
-	  
-	  <a href="{{ url_for('static', filename=f['path']) }}" class="text">play</p>
-	  {% endif %}
-	  <a href="{{ url_for('static', filename=f['path'])  }}">
-
-		<img class="{{ f['class'] }}" src="{{ url_for('static', filename=f['thumb'])  }}"></img>
-
-	  </a>
-	</div>
+<div class="flex-container">
+  <span>See only the best </span>
+  <label class="switch">
+	<input type="checkbox" id="onlythebest"></input>
+	<span class="slider round"></span>
+  </label>
+</div>
+<div class="flex-container gallery">
+  {% for f in files %}
+  
+  <div {% if f['best'] %} class="element best" {% else %} class="element" {% endif %}>
 	
-	{% endfor %}
+	<a href="{{ url_for('static', filename=f['path'])  }}">
+	  <img class="photo" src="{{ url_for('static', filename=f['thumb'])  }}"></img>
+	</a>
+	<span class="fa fa-star unchecked"></span>
+	
   </div>
-</section>
+  
+  {% endfor %}
+</div>
+
+<script src="{{ url_for('static', filename='script.js')  }}" ></script>
+<script>
+  (function() {
+	  document.getElementById('onlythebest').addEventListener("click", onlythebest);
+	  set_only_best(document.getElementById('onlythebest').checked);
+  })();
+</script>

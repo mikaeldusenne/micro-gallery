@@ -1,10 +1,5 @@
-from os.path import join, splitext, basename, dirname
+from mimetypes import MimeTypes
 
 def filetype(f):
-    _, ext = splitext(f)
-    if ext == ".jpg":
-        return 'image'
-    elif ext == ".mp4":
-        return 'video'
-    else:
-        return 'unknown'
+    m = MimeTypes().guess_type(f)[0]
+    return None if m[0] is None else m.split('/')[0]
