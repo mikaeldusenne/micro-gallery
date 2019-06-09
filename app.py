@@ -10,24 +10,28 @@ app = Flask(__name__)
 
 @app.route("/blog/<name>")
 def home(name):
-    name = relpath(name)
-    path = join('static/pages', name, 'files')
     
+    name = relpath(name)
     if '..' in name:
         return "invalid path", 403
-
-    if not os.path.exists(path):
+    
+    pagepath  = join('static', 'pages', name)
+    pathfiles = join(pagepath, 'files')
+    pathyaml  = join(pagepath, 'files.yaml')
+    thumbpath = join('thumbs', name)
+    
+    if not os.path.exists(pathfiles):
         return "No such path", 400
 
-    with open(join('static/pages', name, 'files.yaml')) as yamlf:
+    with open(pathyaml) as yamlf:
         config = yaml.load( yamlf.read() )
-        config['best'] = [str(e) for e in config['best']]
 
-    files = sorted(os.listdir( path ))
-    thumbfiles = os.listdir( join('static/thumbs', name) )
+    files = sorted(os.listdir( pathfiles ))
+    thumbfiles = os.listdir( thumbpath )
     
     def build_item(f):
-        best = any([(e in f) for e in config['best']])
+        best = any([(str(e) in f) for e in config['best']])
+        
         def get_thumb_path(f):
             thmb = [e for e in thumbfiles if splitext(f)[0]==splitext(e)[0]]
             return "" if not len(thmb) else join( 'thumbs', name, thmb[0] )
@@ -36,12 +40,10 @@ def home(name):
                 'thumb':    get_thumb_path(f),
                 'filetype': filetype(f),
                 'best':     best}    
-    
-    mainfiles = [build_item(f) for f in files]
 
     return render_template('index.html',
-                           title=config['title'],
-                           files=mainfiles)
+                           title = config['title'],
+                           files = map(build_item, files))
 
     
 
