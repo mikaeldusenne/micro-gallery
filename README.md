@@ -15,12 +15,13 @@ The structure should be as follow:
 
 ```
 static/
-└─ gallery_1/
-   ├─files/
-   └─files.yaml
-└─ gallery_2/
-   ├─files/
-   └─files.yaml
+  └─ pages/
+     └─ gallery_1/
+        ├─files/
+        └─files.yaml
+     └─ gallery_2/
+        ├─files/
+        └─files.yaml
 ```
 
 with `gallery_1`, `gallery_2` being the different galleries you wish to create.
