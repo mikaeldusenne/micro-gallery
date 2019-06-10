@@ -2,7 +2,7 @@
 
 A simple way to create a lightweight photo and video gallery
 
-[image](readme_src/image.jpg)
+![image](readme_src/image.jpg)
 
 ## Getting Started
 
