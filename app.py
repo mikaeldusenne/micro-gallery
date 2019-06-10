@@ -18,14 +18,18 @@ def home(name):
     pagepath  = join('static', 'pages', name)
     pathfiles = join(pagepath, 'files')
     pathyaml  = join(pagepath, 'files.yaml')
-    
+    files = sorted(os.listdir( pathfiles ))
+
     if not os.path.exists(pathfiles):
         return "No such path", 400
 
     with open(pathyaml) as yamlf:
         config = yaml.load( yamlf.read() )
 
-    files = sorted(os.listdir( pathfiles ))
+    coverpath = (join(name, config['cover'])
+                 if ("cover" in config.keys()
+                     and os.path.exists(join('static', name, config['cover'])))
+                 else None)
     
     def build_item(f):
         best = any([(str(e) in f) for e in config['best']])
@@ -37,7 +41,8 @@ def home(name):
 
     return render_template('index.html',
                            title = config['title'],
-                           files = map(build_item, files))
+                           files = map(build_item, files),
+                           cover = coverpath)
 
 def get_thumb_path(f, name):
     thmb = [e for e in os.listdir(join('static/thumbs', name)) if splitext(f)[0]==splitext(e)[0]]
