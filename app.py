@@ -18,7 +18,7 @@ def home(name):
     pagepath  = join('static', 'pages', name)
     pathfiles = join(pagepath, 'files')
     pathyaml  = join(pagepath, 'files.yaml')
-    thumbpath = join('thumbs', name)
+    thumbpath = join('static', 'thumbs', name)
     
     if not os.path.exists(pathfiles):
         return "No such path", 400
