@@ -51,24 +51,15 @@ def get_frames(vidpath, which = np.linspace(0, 1, video_n_frames)):
     return [get(p) for p in which]
 
 
-def create_thumbs(src, dest):
-    print('creating thumbs for', src)
+def create_thumb(f, dest):
+    print('creating thumbnail for', f)
+    if filetype(f) == 'video':
+        newname = splitext(basename(f))[0] + ".gif"
+        images = get_frames(f)
+        imageio.mimsave(join(dest, newname), images, duration=0.8)
+    elif filetype(f) == 'image':
+        (get_thumbnailed_image( Image.open(f) )
+         .save(join(dest, basename(f))))
+    else:
+        print('ERROR: unknown filetype for', f)
 
-    def create_thumb(f):
-        print('creating thumbnail for', f)
-        if filetype(f) == 'video':
-            newname = splitext(f)[0] + ".gif"
-            images = get_frames(join(src, f))
-            imageio.mimsave(join(dest, newname), images, duration=0.8)
-        elif filetype(f) == 'image':
-            (get_thumbnailed_image( Image.open(join(src, f)) )
-             .save(join(dest, f)))
-        else:
-            print('ERROR: unknown filetype for', f)
-
-    for f in os.listdir(src):
-        create_thumb(f)
-
-
-if __name__ == '__main__':
-    create_thumbs('static/pages/etretat/files', '/tmp/etretat/')
