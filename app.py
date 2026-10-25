@@ -18,10 +18,10 @@ def home(name):
     pagepath  = join('static', 'pages', name)
     pathfiles = join(pagepath, 'files')
     pathyaml  = join(pagepath, 'files.yaml')
-    files = sorted(os.listdir( pathfiles ))
+    if not os.path.isdir(pathfiles):
+        return "No such path", 404
 
-    if not os.path.exists(pathfiles):
-        return "No such path", 400
+    files = sorted(os.listdir( pathfiles ))
 
     with open(pathyaml) as yamlf:
         config = yaml.load( yamlf.read() )
@@ -64,3 +64,4 @@ def init_thumbnails():
 if __name__ == "__main__":
     init_thumbnails()
     app.run(port = 8888, debug=True, host='0.0.0.0')
+
